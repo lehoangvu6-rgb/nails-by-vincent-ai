@@ -1,0 +1,28 @@
+# Secret configuration
+.env
+
+# Virtual environment
+.venv/
+
+# Python cache
+__pycache__/
+*.py[cod]
+
+# Testing cache
+.pytest_cache/
+
+# Logs
+logs/
+*.log
+
+# Generated media
+images/generated/
+videos/generated/
+
+# Generated post packages
+data/posts/
+
+# Editor and operating system
+.vscode/
+.DS_Store
+Thumbs.db
