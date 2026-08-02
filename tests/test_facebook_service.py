@@ -106,4 +106,4 @@ def test_publish_photo_missing_file(monkeypatch):
         service.publish_photo(
             image_path="missing_image.png",
             caption="Test caption",
-        )
+        )   
