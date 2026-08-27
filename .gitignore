@@ -26,3 +26,8 @@ data/posts/
 .vscode/
 .DS_Store
 Thumbs.db
+# Private nail photos and videos
+media/
+
+# Local rendered videos
+videos/

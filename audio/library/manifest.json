@@ -1,0 +1,17 @@
+[
+  {
+    "id": "meta_250392545704787",
+    "title": "Love Me",
+    "artist": "G.No",
+    "source": "Meta Sound Collection",
+    "path": "audio/library/meta_love_me_gno.mp4",
+    "genre": "Hip Hop",
+    "tempo": "Medium",
+    "has_vocals": true,
+    "commercial_use_allowed": true,
+    "clean_reviewed": false,
+    "hook_start_seconds": 20,
+    "priority": 1,
+    "times_used": 0
+  }
+]

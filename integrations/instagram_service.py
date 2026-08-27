@@ -181,3 +181,23 @@ class InstagramService:
         self.wait_until_ready(creation_id)
 
         return self.publish_container(creation_id)
+
+    def publish_reel_from_url(self, video_url: str, caption: str, hashtags: str = "") -> dict[str, Any]:
+        full_caption = "\n\n".join(part for part in (caption.strip(), hashtags.strip()) if part)
+        response = requests.post(
+            f"{self.base_url}/{self.account_id}/media",
+            data={
+                "media_type": "REELS",
+                "video_url": video_url,
+                "caption": full_caption,
+                "share_to_feed": "true",
+                "access_token": self.access_token,
+            },
+            timeout=60,
+        )
+        response.raise_for_status()
+        creation_id = response.json().get("id")
+        if not creation_id:
+            raise ValueError("Instagram did not return a Reel creation ID.")
+        self.wait_until_ready(creation_id, max_attempts=30, delay_seconds=5)
+        return self.publish_container(creation_id)

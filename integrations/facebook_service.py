@@ -120,3 +120,50 @@ class FacebookService:
 
         response.raise_for_status()
         return response.json()
+
+    def publish_reel(self, video_path: str, description: str) -> dict[str, Any]:
+        file_path = Path(video_path)
+        if not file_path.is_file():
+            raise FileNotFoundError(f"Reel not found: {file_path}")
+
+        start = requests.post(
+            f"{self.base_url}/{self.page_id}/video_reels",
+            data={"upload_phase": "start", "access_token": self.access_token},
+            timeout=30,
+        )
+        start.raise_for_status()
+        session = start.json()
+        video_id = session.get("video_id")
+        upload_url = session.get("upload_url")
+        if not video_id or not upload_url:
+            raise ValueError("Facebook did not create a Reel upload session.")
+
+        with file_path.open("rb") as video_file:
+            upload = requests.post(
+                upload_url,
+                headers={
+                    "Authorization": f"OAuth {self.access_token}",
+                    "offset": "0",
+                    "file_size": str(file_path.stat().st_size),
+                    "Content-Type": "application/octet-stream",
+                },
+                data=video_file,
+                timeout=300,
+            )
+        upload.raise_for_status()
+
+        finish = requests.post(
+            f"{self.base_url}/{self.page_id}/video_reels",
+            data={
+                "upload_phase": "finish",
+                "video_id": video_id,
+                "video_state": "PUBLISHED",
+                "description": description,
+                "access_token": self.access_token,
+            },
+            timeout=60,
+        )
+        finish.raise_for_status()
+        result = finish.json()
+        result.setdefault("id", video_id)
+        return result
